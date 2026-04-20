@@ -16,6 +16,7 @@ import {
   MapPin, BedDouble, Bath, Maximize2, Eye, Heart, Share2,
   Calendar, Building2, Zap, Phone, Mail, MessageCircle,
   CheckCircle2, Star, ArrowUpRight, Home, Layers,
+  ShieldCheck, ShieldAlert, ExternalLink, FileText,
 } from "lucide-react";
 
 const LISTING_BADGE: Record<string, { label: string; bg: string; color: string }> = {
@@ -95,6 +96,10 @@ export default function PropertyDetailPage() {
   const [showEnquiry,       setShowEnquiry]       = useState(false);
   const [similarProperties, setSimilarProperties] = useState<Property[]>([]);
   const [descExpanded,      setDescExpanded]      = useState(false);
+  const [landRecord,        setLandRecord]        = useState<{
+    status: string; state?: string; district?: string;
+    khasraNumber?: string; khautaniNumber?: string; govPortalUrl?: string;
+  } | null>(null);
 
   useEffect(() => {
     if (!params.slug) return;
@@ -105,6 +110,9 @@ export default function PropertyDetailPage() {
         setSaved(user?.savedProperties?.includes(p._id) || false);
         api.get(`/properties/${p._id}/similar`)
           .then((r) => setSimilarProperties(r.data.data?.properties || []))
+          .catch(() => {});
+        api.get(`/properties/${p._id}/land-record`)
+          .then((r) => setLandRecord(r.data.data?.landRecord || null))
           .catch(() => {});
       })
       .catch(() => router.push("/properties"))
@@ -341,6 +349,102 @@ export default function PropertyDetailPage() {
                 </Card>
               )}
 
+              {/* Land Record Verification */}
+              {landRecord && (
+                <Card>
+                  <SectionTitle>
+                    <span className="flex items-center gap-2">
+                      <FileText className="w-4 h-4 text-[#C8922A]" />
+                      Land Record
+                    </span>
+                  </SectionTitle>
+
+                  {landRecord.status === "verified" ? (
+                    <div>
+                      {/* Verified banner */}
+                      <div
+                        className="flex items-start gap-3 p-3.5 rounded-xl mb-4"
+                        style={{ background: "#f0fdf4", border: "1px solid #bbf7d0" }}
+                      >
+                        <ShieldCheck className="w-5 h-5 text-green-600 shrink-0 mt-0.5" />
+                        <div>
+                          <p className="text-sm font-bold text-green-800">Paper Saaf aur Pakka ✓</p>
+                          <p className="text-xs text-green-700 mt-0.5">
+                            Land records verified against government portal
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Record details */}
+                      <div className="grid grid-cols-2 gap-2.5 text-sm">
+                        {landRecord.khasraNumber && (
+                          <div className="p-3 rounded-xl bg-[#f8fafc] border border-gray-100">
+                            <p className="text-[10px] font-semibold uppercase tracking-wide text-gray-400 mb-0.5">Khasra No.</p>
+                            <p className="font-semibold text-gray-800">{landRecord.khasraNumber}</p>
+                          </div>
+                        )}
+                        {landRecord.khautaniNumber && (
+                          <div className="p-3 rounded-xl bg-[#f8fafc] border border-gray-100">
+                            <p className="text-[10px] font-semibold uppercase tracking-wide text-gray-400 mb-0.5">Khatauni No.</p>
+                            <p className="font-semibold text-gray-800">{landRecord.khautaniNumber}</p>
+                          </div>
+                        )}
+                        {landRecord.district && (
+                          <div className="p-3 rounded-xl bg-[#f8fafc] border border-gray-100">
+                            <p className="text-[10px] font-semibold uppercase tracking-wide text-gray-400 mb-0.5">District</p>
+                            <p className="font-semibold text-gray-800 capitalize">{landRecord.district}</p>
+                          </div>
+                        )}
+                        {landRecord.state && (
+                          <div className="p-3 rounded-xl bg-[#f8fafc] border border-gray-100">
+                            <p className="text-[10px] font-semibold uppercase tracking-wide text-gray-400 mb-0.5">State</p>
+                            <p className="font-semibold text-gray-800">{landRecord.state}</p>
+                          </div>
+                        )}
+                      </div>
+
+                      {landRecord.govPortalUrl && (
+                        <a
+                          href={landRecord.govPortalUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="mt-3 flex items-center gap-1.5 text-xs font-semibold text-[#1B3F72] hover:text-[#C8922A] transition-colors"
+                        >
+                          <ExternalLink className="w-3.5 h-3.5" />
+                          View on Government Portal
+                        </a>
+                      )}
+                    </div>
+                  ) : landRecord.status === "disputed" ? (
+                    <div
+                      className="flex items-start gap-3 p-3.5 rounded-xl"
+                      style={{ background: "#fff7ed", border: "1px solid #fed7aa" }}
+                    >
+                      <ShieldAlert className="w-5 h-5 text-orange-500 shrink-0 mt-0.5" />
+                      <div>
+                        <p className="text-sm font-bold text-orange-800">Record Disputed</p>
+                        <p className="text-xs text-orange-700 mt-0.5">
+                          Land records are under dispute. Please verify independently before proceeding.
+                        </p>
+                      </div>
+                    </div>
+                  ) : (
+                    <div
+                      className="flex items-start gap-3 p-3.5 rounded-xl"
+                      style={{ background: "#f8fafc", border: "1px solid #e5e7eb" }}
+                    >
+                      <ShieldAlert className="w-5 h-5 text-gray-400 shrink-0 mt-0.5" />
+                      <div>
+                        <p className="text-sm font-semibold text-gray-600">Verification Pending</p>
+                        <p className="text-xs text-gray-500 mt-0.5">
+                          Our team is verifying land records for this property.
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                </Card>
+              )}
+
               {/* Location */}
               <Card>
                 <SectionTitle>Location</SectionTitle>
@@ -460,6 +564,7 @@ export default function PropertyDetailPage() {
                   { icon: "🏠", text: "Verified Listing" },
                   { icon: "📸", text: `${property.images?.length ?? 0} professional photos` },
                   { icon: "📍", text: `${property.location.city}, ${property.location.state}` },
+                  ...(landRecord?.status === "verified" ? [{ icon: "📋", text: "Paper Saaf aur Pakka" }] : []),
                 ].map(({ icon, text }) => (
                   <div key={text} className="flex items-center gap-2.5 text-xs text-gray-500">
                     <span>{icon}</span>

@@ -97,7 +97,7 @@ export default function PropertyDetailPage() {
   const [similarProperties, setSimilarProperties] = useState<Property[]>([]);
   const [descExpanded,      setDescExpanded]      = useState(false);
   const [landRecord,        setLandRecord]        = useState<{
-    status: string; state?: string; district?: string;
+    verificationStatus: string; state?: string; district?: string;
     khasraNumber?: string; khautaniNumber?: string; govPortalUrl?: string;
   } | null>(null);
 
@@ -112,7 +112,7 @@ export default function PropertyDetailPage() {
           .then((r) => setSimilarProperties(r.data.data?.properties || []))
           .catch(() => {});
         api.get(`/properties/${p._id}/land-record`)
-          .then((r) => setLandRecord(r.data.data?.landRecord || null))
+          .then((r) => setLandRecord(r.data.data || null))
           .catch(() => {});
       })
       .catch(() => router.push("/properties"))
@@ -359,7 +359,7 @@ export default function PropertyDetailPage() {
                     </span>
                   </SectionTitle>
 
-                  {landRecord.status === "verified" ? (
+                  {landRecord.verificationStatus === "verified" ? (
                     <div>
                       {/* Verified banner */}
                       <div
@@ -415,7 +415,7 @@ export default function PropertyDetailPage() {
                         </a>
                       )}
                     </div>
-                  ) : landRecord.status === "disputed" ? (
+                  ) : landRecord.verificationStatus === "disputed" ? (
                     <div
                       className="flex items-start gap-3 p-3.5 rounded-xl"
                       style={{ background: "#fff7ed", border: "1px solid #fed7aa" }}
@@ -564,7 +564,7 @@ export default function PropertyDetailPage() {
                   { icon: "🏠", text: "Verified Listing" },
                   { icon: "📸", text: `${property.images?.length ?? 0} professional photos` },
                   { icon: "📍", text: `${property.location.city}, ${property.location.state}` },
-                  ...(landRecord?.status === "verified" ? [{ icon: "📋", text: "Paper Saaf aur Pakka" }] : []),
+                  ...(landRecord?.verificationStatus === "verified" ? [{ icon: "📋", text: "Paper Saaf aur Pakka" }] : []),
                 ].map(({ icon, text }) => (
                   <div key={text} className="flex items-center gap-2.5 text-xs text-gray-500">
                     <span>{icon}</span>

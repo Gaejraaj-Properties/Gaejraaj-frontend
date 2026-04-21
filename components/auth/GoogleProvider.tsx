@@ -1,20 +1,22 @@
 "use client";
 
-import { GoogleOAuthProvider } from "@react-oauth/google";
 import { useEffect, useState } from "react";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function GoogleProvider({ children }: { children: React.ReactNode }) {
-  const [mounted, setMounted] = useState(false);
+  const [Provider, setProvider] = useState<React.ComponentType<{ clientId: string; children: React.ReactNode }> | null>(null);
 
   useEffect(() => {
-    setMounted(true);
+    import("@react-oauth/google").then((mod) => {
+      setProvider(() => mod.GoogleOAuthProvider as React.ComponentType<{ clientId: string; children: React.ReactNode }>);
+    });
   }, []);
 
-  if (!mounted) return <>{children}</>;
+  if (!Provider) return <>{children}</>;
 
   return (
-    <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || ""}>
+    <Provider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || ""}>
       {children}
-    </GoogleOAuthProvider>
+    </Provider>
   );
 }

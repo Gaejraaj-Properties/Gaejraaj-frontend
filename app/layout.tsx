@@ -1,13 +1,11 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
-import dynamic from "next/dynamic";
 import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
 import ConditionalNavbar from "@/components/layout/ConditionalNavbar";
 import ConditionalFooter from "@/components/layout/ConditionalFooter";
 import { Toaster } from "@/components/ui/sonner";
-
-const GoogleProvider = dynamic(() => import("@/components/auth/GoogleProvider"), { ssr: false });
+import GoogleProvider from "@/components/auth/GoogleProvider";
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: "--font-sans",

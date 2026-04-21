@@ -38,13 +38,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setToken(storedToken);
       setUser(JSON.parse(storedUser));
       // Ensure cookie is set for middleware (handles existing logged-in sessions)
-      const base = `path=/; max-age=${7 * 24 * 60 * 60}; SameSite=Lax${location.protocol === "https:" ? "; Secure" : ""}`;
+      const base = `path=/; max-age=${7 * 24 * 60 * 60}; SameSite=Lax${typeof window !== "undefined" && location.protocol === "https:" ? "; Secure" : ""}`;
       document.cookie = `auth_token=${storedToken}; ${base}`;
     }
     setLoading(false);
   }, []);
 
-  const cookieBase = `path=/; max-age=${7 * 24 * 60 * 60}; SameSite=Lax${location.protocol === "https:" ? "; Secure" : ""}`;
+  const cookieBase = `path=/; max-age=${7 * 24 * 60 * 60}; SameSite=Lax${typeof window !== "undefined" && typeof window !== "undefined" && location.protocol === "https:" ? "; Secure" : ""}`;
 
   const setAuthCookie = (t: string) => {
     document.cookie = `auth_token=${t}; ${cookieBase}`;
@@ -79,7 +79,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(googleUser);
     localStorage.setItem("token", t);
     localStorage.setItem("user", JSON.stringify(googleUser));
-    const base = `path=/; max-age=${7 * 24 * 60 * 60}; SameSite=Lax${location.protocol === "https:" ? "; Secure" : ""}`;
+    const base = `path=/; max-age=${7 * 24 * 60 * 60}; SameSite=Lax${typeof window !== "undefined" && location.protocol === "https:" ? "; Secure" : ""}`;
     document.cookie = `auth_token=${t}; ${base}`;
   }, []);
 

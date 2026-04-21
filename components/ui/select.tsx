@@ -22,7 +22,7 @@ function SelectValue({ className, ...props }: SelectPrimitive.Value.Props) {
   return (
     <SelectPrimitive.Value
       data-slot="select-value"
-      className={cn("flex flex-1 text-left", className)}
+      className={cn("flex-1 truncate text-left", className)}
       {...props}
     />
   )
@@ -42,15 +42,15 @@ function SelectTrigger({
       data-size={size}
       className={cn(
         // Base
-        "flex w-fit items-center justify-between gap-2 rounded-xl border border-gray-200 bg-white",
+        "flex w-full items-center justify-between gap-2 rounded-xl border border-gray-200 bg-white",
         "px-3 text-sm font-medium text-gray-700 whitespace-nowrap",
         "transition-all duration-150 outline-none select-none cursor-pointer",
         // Focus
-        "focus-visible:border-[#1B3F72] focus-visible:ring-3 focus-visible:ring-[#1B3F72]/15",
+        "focus-visible:border-indigo-500 focus-visible:ring-3 focus-visible:ring-indigo-500/15",
         // Hover
-        "hover:border-[#ADC8EE] hover:bg-[#F8FAFF]",
+        "hover:border-indigo-300 hover:bg-indigo-50/30",
         // Open state
-        "data-[state=open]:border-[#1B3F72] data-[state=open]:ring-3 data-[state=open]:ring-[#1B3F72]/15",
+        "data-[state=open]:border-indigo-500 data-[state=open]:ring-3 data-[state=open]:ring-indigo-500/15",
         // Placeholder
         "data-placeholder:text-gray-400",
         // Sizes
@@ -60,7 +60,6 @@ function SelectTrigger({
         "disabled:cursor-not-allowed disabled:opacity-50",
         // SVG
         "[&_svg]:pointer-events-none [&_svg]:shrink-0",
-        "*:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center",
         className
       )}
       {...props}
@@ -159,10 +158,10 @@ function SelectItem({
         "rounded-xl px-3 py-2.5 text-sm font-medium text-gray-700",
         "outline-none select-none transition-colors duration-100",
         // Hover / focus
-        "hover:bg-[#EEF3FB] hover:text-[#1B3F72]",
-        "focus:bg-[#EEF3FB] focus:text-[#1B3F72]",
+        "hover:bg-indigo-50 hover:text-indigo-700",
+        "focus:bg-indigo-50 focus:text-indigo-700",
         // Selected (highlighted)
-        "data-highlighted:bg-[#EEF3FB] data-highlighted:text-[#1B3F72]",
+        "data-highlighted:bg-indigo-50 data-highlighted:text-indigo-700",
         // Disabled
         "data-disabled:pointer-events-none data-disabled:opacity-40",
         // SVG
@@ -175,7 +174,7 @@ function SelectItem({
       <SelectPrimitive.ItemIndicator
         render={
           <span className="flex w-4 items-center justify-center shrink-0">
-            <CheckIcon className="size-3.5 text-[#C8922A]" strokeWidth={2.5} />
+            <CheckIcon className="size-3.5 text-indigo-500" strokeWidth={2.5} />
           </span>
         }
       />

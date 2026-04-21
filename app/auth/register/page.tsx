@@ -146,7 +146,7 @@ export default function RegisterPage() {
 
       {/* ── Right form panel ──────────────────────────────────────────────── */}
       <div className="flex-1 flex items-center justify-center px-6 py-12 bg-[#F5F7FA]">
-        <div className="w-full max-w-[420px] animate-fade-up">
+        <div className="w-full max-w-[460px] animate-fade-up">
           {/* Mobile logo */}
           <div className="flex items-center justify-center gap-2 mb-8 lg:hidden">
             <div className="w-10 h-10 bg-gradient-to-br from-[#1B3F72] to-[#2d5fa0] rounded-xl flex items-center justify-center shadow">
@@ -242,10 +242,10 @@ export default function RegisterPage() {
               <div>
                 <label className="block text-xs font-semibold text-gray-600 uppercase tracking-wide mb-1.5">I am a</label>
                 <Select value={form.role} onValueChange={(val) => setForm((f) => ({ ...f, role: val ?? f.role }))}>
-                  <SelectTrigger className="h-11 text-sm">
-                    <SelectValue />
+                  <SelectTrigger className="h-11 text-sm w-full min-w-0">
+                    <SelectValue placeholder="Select your role" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent align="start" className="w-[var(--anchor-width)] min-w-[260px]">
                     <SelectItem value="buyer">Buyer / Tenant</SelectItem>
                     <SelectItem value="seller">Property Owner / Seller</SelectItem>
                     <SelectItem value="agent">Real Estate Agent</SelectItem>

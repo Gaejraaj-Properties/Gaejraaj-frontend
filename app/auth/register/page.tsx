@@ -9,7 +9,8 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Building2, Eye, EyeOff, ShieldCheck, MapPin, TrendingUp } from "lucide-react";
 import { toast } from "sonner";
-import GoogleAuthButton from "@/components/auth/GoogleAuthButton";
+import dynamic from "next/dynamic";
+const GoogleAuthButton = dynamic(() => import("@/components/auth/GoogleAuthButton"), { ssr: false });
 import { cn } from "@/lib/utils";
 
 const FEATURES = [
